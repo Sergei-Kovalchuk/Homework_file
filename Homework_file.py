@@ -1,5 +1,5 @@
 import os
-import pprint
+from pprint import pprint
 # with open('recipes.txt', 'w', encoding='utf-8') as f:
 #     f.write('Омлет\n3\nЯйцо | 2 | штука\nМолоко | 100 | мл\nПомидор | 2 | шт\n\n')
 # with open('recipes.txt', 'a', encoding='utf-8') as f:
@@ -25,3 +25,21 @@ def read_cookbook():
         return cook_book
 cook_book = read_cookbook()
 print(cook_book)
+
+def get_shop_list_by_dishes(dishes, person_count):
+    ingr_list = {}
+    for dish_name in dishes:
+        if dish_name in cook_book:
+            for ings in cook_book[dish_name]:
+                list_req_ingr = {}
+                if  ings['ingredient_name'] not in ingr_list:
+                    list_req_ingr['measure'] = ings['measure']
+                    list_req_ingr['quantity'] = ings['quantity'] * person_count
+                    ingr_list[ings['ingredient_name']] = list_req_ingr
+                else:
+                    ingr_list[ings['ingredient_name']]['quantity'] = ingr_list[ings['ingredient_name']]['quantity'] + \
+                                                                     ings['quantity'] * person_count
+        else:
+            print(f'\n"Такого блюда нет!"\n')
+    return ingr_list
+pprint(get_shop_list_by_dishes(dishes=['Запеченный картофель', 'Омлет'], person_count=2))
